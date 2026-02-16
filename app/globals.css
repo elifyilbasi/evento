@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+.state-effects {
+  @apply hover:scale-105 active:scale-[1.02] transition focus:scale-105;
+}
+
 @theme {
   --color-accent: #a4f839;
 }
