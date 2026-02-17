@@ -1,16 +1,33 @@
+"use client";
+
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import type { EventoEvent } from "@prisma/client";
 import Link from "next/link";
 import Image from "next/image";
-import { EventoEvent } from "@/lib/types";
 
 type EventCardProps = {
   event: EventoEvent;
 };
 
+const MotionLink = motion.create(Link);
+
 export default function EventCard({ event }: EventCardProps) {
+  const ref = useRef<HTMLAnchorElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1", "1.5 1"],
+  });
+  const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+
   return (
-    <Link
-      className="flex-1 basis-80 h-95 max-w-125"
+    <MotionLink
+      ref={ref}
+      className="flex-1 basis-80 h-95 max-w-125 relative isolate"
       href={`/event/${event.slug}`}
+      style={{
+        scale: scaleProgress,
+      }}
     >
       <section className="flex flex-col w-full h-full bg-white/3 rounded-xl overflow-hidden relative state-effects">
         <Image
@@ -38,6 +55,6 @@ export default function EventCard({ event }: EventCardProps) {
           </p>
         </section>
       </section>
-    </Link>
+    </MotionLink>
   );
 }
