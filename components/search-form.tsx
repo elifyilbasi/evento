@@ -10,6 +10,8 @@ export default function SearchForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!searchText) return;
+
     router.push(`/events/${searchText}`);
   };
 
