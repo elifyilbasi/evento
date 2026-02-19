@@ -1,13 +1,23 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-const prismaClientSingleton = () => {
-  const connectionString = process.env.DATABASE_URL;
+function getConnectionString() {
+  const connectionString =
+    process.env.DATABASE_URL ??
+    process.env.POSTGRES_PRISMA_URL ??
+    process.env.POSTGRES_URL;
 
   if (!connectionString) {
-    throw new Error("Missing DATABASE_URL");
+    throw new Error(
+      "Missing database connection string. Set DATABASE_URL or POSTGRES_PRISMA_URL.",
+    );
   }
 
+  return connectionString;
+}
+
+const prismaClientSingleton = () => {
+  const connectionString = getConnectionString();
   const adapter = new PrismaPg({ connectionString });
   return new PrismaClient({ adapter });
 };
