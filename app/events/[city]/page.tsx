@@ -7,6 +7,7 @@ import { capitalize } from "@/lib/utils";
 
 type EventsPageProps = {
   params: Promise<{ city: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata({
@@ -14,12 +15,21 @@ export async function generateMetadata({
 }: EventsPageProps): Promise<Metadata> {
   const { city } = await params;
   return {
-    title: city === "all " ? "All Events" : `Events in ${capitalize(city)}`,
+    title: city === "all" ? "All Events" : `Events in ${capitalize(city)}`,
   };
 }
 
-export default async function EventsPage({ params }: EventsPageProps) {
+export default async function EventsPage({
+  params,
+  searchParams,
+}: EventsPageProps) {
   const { city } = await params;
+  const resolvedSearchParams = await searchParams;
+
+  const rawPage = Array.isArray(resolvedSearchParams?.page)
+    ? resolvedSearchParams.page[0]
+    : resolvedSearchParams?.page;
+  const page = Math.max(1, Number(rawPage ?? 1) || 1);
 
   return (
     <main className="flex flex-col items-center py-24 px-[20x] min-h-[110vh]">
@@ -29,7 +39,7 @@ export default async function EventsPage({ params }: EventsPageProps) {
       </H1>
 
       <Suspense fallback={<Loading />}>
-        <EventsList city={city} />
+        <EventsList city={city} page={page} />
       </Suspense>
     </main>
   );

@@ -18,7 +18,7 @@ export default function EventCard({ event }: EventCardProps) {
     target: ref,
     offset: ["0 1", "1.5 1"],
   });
-  const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
 
   return (
     <MotionLink
@@ -27,6 +27,9 @@ export default function EventCard({ event }: EventCardProps) {
       href={`/event/${event.slug}`}
       style={{
         scale: scaleProgress,
+      }}
+      initial={{
+        scale: 0.9,
       }}
     >
       <section className="flex flex-col w-full h-full bg-white/3 rounded-xl overflow-hidden relative state-effects">

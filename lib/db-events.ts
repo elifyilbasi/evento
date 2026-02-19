@@ -2,7 +2,8 @@ import "server-only";
 
 import { PrismaClient } from "@prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import { capitalize } from "../utils";
+import { capitalize } from "./utils";
+import { notFound } from "next/navigation";
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
@@ -23,16 +24,38 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export async function getEvent(slug: string) {
-  return prisma.eventoEvent.findUniqueOrThrow({
+  const event = await prisma.eventoEvent.findUnique({
     where: { slug },
   });
+  if (!event) {
+    debugger;
+    return notFound();
+  }
+  return event;
 }
 
-export async function getEvents(city: string) {
+export async function getEvents(city: string, page: number) {
   const events = await prisma.eventoEvent.findMany({
     where: {
       city: city === "all" ? undefined : capitalize(city),
     },
+    orderBy: {
+      date: "asc",
+    },
+    take: 6,
+    skip: (page - 1) * 6,
   });
-  return events;
+
+  let totalCount;
+  if (city === "all") {
+    totalCount = await prisma.eventoEvent.count();
+  } else {
+    totalCount = await prisma.eventoEvent.count({
+      where: {
+        city: capitalize(city),
+      },
+    });
+  }
+
+  return { totalCount, events };
 }
