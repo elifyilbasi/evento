@@ -1,6 +1,6 @@
 import "server-only";
-
 import { PrismaClient } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { capitalize } from "./utils";
 import { notFound } from "next/navigation";
@@ -23,18 +23,21 @@ if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
 
-export async function getEvent(slug: string) {
+export const getEvent = unstable_cache(async (slug: string) => {
   const event = await prisma.eventoEvent.findUnique({
-    where: { slug },
+    where: {
+      slug: slug,
+    },
   });
+
   if (!event) {
-    debugger;
     return notFound();
   }
-  return event;
-}
 
-export async function getEvents(city: string, page: number) {
+  return event;
+});
+
+export const getEvents = unstable_cache(async (city: string, page = 1) => {
   const events = await prisma.eventoEvent.findMany({
     where: {
       city: city === "all" ? undefined : capitalize(city),
@@ -56,6 +59,8 @@ export async function getEvents(city: string, page: number) {
       },
     });
   }
-
-  return { totalCount, events };
-}
+  return {
+    events,
+    totalCount,
+  };
+});

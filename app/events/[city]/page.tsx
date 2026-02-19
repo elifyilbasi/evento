@@ -27,13 +27,14 @@ export default async function EventsPage({
   searchParams,
 }: EventsPageProps) {
   const { city } = await params;
-  const parsedPage = pageNumberSchema.safeParse(searchParams.page);
+  const { page } = await searchParams;
+  const parsedPage = pageNumberSchema.safeParse(page);
+
   if (!parsedPage.success) {
     throw new Error("Invalid page number");
   }
-
   return (
-    <main className="flex flex-col items-center py-24 px-[20x] min-h-[110vh]">
+    <main className="flex flex-col items-center py-24 px-5 min-h-[110vh]">
       <H1 className="mb-28">
         {city === "all" && "All Events"}
         {city !== "all" && `Events In ${capitalize(city)}`}
