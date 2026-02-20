@@ -1,7 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Evento – Event Discovery App
 
-## Deploy on Vercel
+## 🚀 Tech Stack
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- Prisma
 
-You can find the working link of the project here: 
+## ✨ Features
+- Event listing
+- Event details page
+- Search functionality
+- Responsive layout
 
-https://evento-2mbzch9wn-elifyilbasis-projects.vercel.app/events/all?page=2
+## 🧠 What I Practiced
+- Server vs Client components
+- Data fetching with React Query
+- Dynamic routes
+
+## 🔗 Live Demo
+https://evento-2mbzch9wn-elifyilbasis-projects.vercel.app
