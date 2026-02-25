@@ -13,9 +13,10 @@
 - Responsive layout
 
 ## 🧠 What I Practiced
-- Server vs Client components
-- Data fetching with React Query
+- Next.js App Router architecture (server & client components)
 - Dynamic routes
+- Clean folder structure & separation of concerns
+- Reusable component design
 
 ## 🔗 Live Demo
 https://evento-2mbzch9wn-elifyilbasis-projects.vercel.app
